@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전화번호"
+        android:textSize="30dp"
+        android:id="@+id/btnPN"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"/>
+    
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/btnPN"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnPN"
+        android:layout_toLeftOf="@id/btnCancle"
+        android:text="입력" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnCancle"
+        android:text="취소"
+        android:layout_below="@+id/btnPN"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
