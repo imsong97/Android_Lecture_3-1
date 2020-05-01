@@ -4,9 +4,9 @@
 
 <span>1주차 : 과제-LifeCycle </span>
 
-<span>2주차 : 과제-LifeCycle </span>
+<span>2주차 : 수업-Layout_Prac /과제-LifeCycle </span>
 
-<span>3주차 : 과제-LifeCycle </span>
+<span>3주차 : 과제- </span>
 
 <span>4주차 : 수업-GridViewSample, ListViewSample /과제-GallerySample </span>
 
