@@ -1,5 +1,4 @@
 # Android_Lecture
-
 <h2>3학년 2학기 안드로이드 수업</h2>
 
 <span>1주차 : 과제-LifeCycle </span>
@@ -8,7 +7,7 @@
 
 <span>3주차 : </span>
 
-<span>4주차 : 수업-GridViewSample, ListViewSample /과제-GallerySample </span>
+<span>4주차 : 수업-GridViewSample, ListViewSample / 과제-GallerySample </span>
 
 <span>5주차 : 수업-FragmentText / 과제-Fragment </span>
 
