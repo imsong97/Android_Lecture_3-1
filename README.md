@@ -7,7 +7,7 @@
 
 <span>3주차 : </span>
 
-<span>4주차 : 수업-GridViewSample, ListViewSample / 과제-GallerySample </span>
+<span>4주차 : 수업-GallerySample, ListViewSample / 과제-GridViewSample</span>
 
 <span>5주차 : 수업-FragmentText / 과제-Fragment </span>
 
