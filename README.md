@@ -3,7 +3,7 @@
 
 <span>1주차 : 과제-LifeCycle </span>
 
-<span>2주차 : 수업-Layout_Prac / </span>
+<span>2주차 : 과제-Layout_Prac</span>
 
 <span>3주차 : </span>
 
