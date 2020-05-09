@@ -45,6 +45,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="지도확대"
+                android:background="#6161E6"
+                android:textColor="#fff"
                 android:id="@+id/btnZoomIn"
                 android:elevation="20dp"
                 android:layout_margin="10dp"/>
@@ -52,6 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="지도축소"
+                android:background="#6161E6"
+                android:textColor="#fff"
                 android:id="@+id/btnZoomOut"
                 android:elevation="20dp"
                 android:layout_margin="10dp"/>
@@ -59,6 +63,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="현재위치"
+                android:background="#6161E6"
+                android:textColor="#fff"
                 android:id="@+id/btnMyLocation"
                 android:elevation="20dp"
                 android:layout_margin="10dp"/>

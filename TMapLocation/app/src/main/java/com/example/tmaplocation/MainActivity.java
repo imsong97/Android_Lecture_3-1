@@ -8,12 +8,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.skt.Tmap.TMapData;
+import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPOIItem;
 import com.skt.Tmap.TMapView;
 
@@ -79,12 +82,23 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btnSearch:
+                    String strData = edtSearch.getText().toString();
+                    if(!strData.equals(""))
+                        searchPOI(strData);
+                    else
+                        Toast.makeText(getApplicationContext(), "검색어를 입력하세요",Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnZoomIn:
+                    tMapView.MapZoomIn();
                     break;
                 case R.id.btnZoomOut:
+                    tMapView.MapZoomOut();
                     break;
                 case R.id.btnMyLocation:
+                    try{
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+                    }catch(SecurityException e){
+                    }
                     break;
             }
         }
@@ -94,7 +108,11 @@ public class MainActivity extends AppCompatActivity {
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            tMapView.setCenterPoint(lon,lat);
+            tMapView.setLocationPoint(lon, lat);
+            tMapView.setIconVisibility(true);
         }
 
         @Override
@@ -114,6 +132,31 @@ public class MainActivity extends AppCompatActivity {
     };
 
     // 마커 설정
+    private void setMarker(String name, double lat, double lon){
+
+    }
 
     // 통합검색
+    private void searchPOI(String strData){
+        tMapData.findAllPOI(strData, (TMapData.FindAllPOIListenerCallback) (arrayList)->{
+            poiResult.addAll(arrayList);
+
+            tMapView.setCenterPoint(arrayList.get(0).getPOIPoint().getLongitude(), arrayList.get(0).getPOIPoint().getLatitude(), true);
+
+            for(int i=0; i<arrayList.size(); i++){
+                TMapPOIItem item = (TMapPOIItem) arrayList.get(i);
+                Log.d("POI Name:", item.getPOIName().toString()+", "
+                        +"Address: "+item.getPOIAddress().replace("null","")+", "
+                        +"Point: "+item.getPOIPoint().toString()
+                        +"Contents: " +item.getPOIContent());
+                TMapMarkerItem markerItem = new TMapMarkerItem();
+                markerItem.setTMapPoint(item.getPOIPoint());
+                markerItem.setCalloutTitle(item.getPOIName());
+                markerItem.setCalloutSubTitle(item.getPOIAddress());
+                markerItem.setCanShowCallout(true);
+
+                tMapView.addMarkerItem(item.getPOIName(), markerItem);
+            }
+        });
+    }
 }
