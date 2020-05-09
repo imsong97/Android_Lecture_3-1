@@ -5,7 +5,7 @@
 
 <span>2주차 : 과제-Layout_Prac</span>
 
-<span>3주차 : </span>
+<span>3주차 : 과제-ConstraintLayout</span>
 
 <span>4주차 : 수업-GallerySample, ListViewSample / 과제-GridViewSample</span>
 
