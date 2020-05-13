@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:elevation="20dp"
+                android:singleLine="true"
                 android:id="@+id/edtSearch"/>
             <Button
                 android:layout_width="0dp"
