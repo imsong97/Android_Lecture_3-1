@@ -11,9 +11,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.skt.Tmap.TMapData;
@@ -37,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     Bitmap rightButton;
     BitmapFactory.Options options;
 
+    ListView list;
+    final String poiList[] = {};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         btnMyLocation = findViewById(R.id.btnMyLocation);
         btnSearch = findViewById(R.id.btnSearch);
         edtSearch = findViewById(R.id.edtSearch);
+        list = findViewById(R.id.listview);
 
 //        options.inSampleSize = 16;
 //        rightButton = new BitmapFactory.decodeResource(getResources(), R.drawable.right_arrow, options);
@@ -86,8 +93,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btnSearch:
                     String strData = edtSearch.getText().toString();
 
-                    if(!strData.equals(""))
+                    if(!strData.equals("")){
                         searchPOI(strData);
+                    }
                     else
                         Toast.makeText(getApplicationContext(), "검색어를 입력하세요",Toast.LENGTH_SHORT).show();
                     break;
@@ -141,25 +149,39 @@ public class MainActivity extends AppCompatActivity {
 
     // 통합검색
     private void searchPOI(String strData){
-        tMapData.findAllPOI(strData, (TMapData.FindAllPOIListenerCallback) (arrayList)->{
-            poiResult.addAll(arrayList);
+        tMapData.findAllPOI(strData, new TMapData.FindAllPOIListenerCallback() {
+            @Override
+            public void onFindAllPOI(ArrayList<TMapPOIItem> arrayList) {
+                poiResult.addAll(arrayList);
 
-            tMapView.setCenterPoint(arrayList.get(0).getPOIPoint().getLongitude(), arrayList.get(0).getPOIPoint().getLatitude(), true);
+                tMapView.setCenterPoint(arrayList.get(0).getPOIPoint().getLongitude(), arrayList.get(0).getPOIPoint().getLatitude(), true);
 
-            for(int i=0; i<arrayList.size(); i++){
-                TMapPOIItem item = (TMapPOIItem) arrayList.get(i);
-                Log.d("POI Name:", item.getPOIName().toString()+", "
-                        +"Address: "+item.getPOIAddress().replace("null"," ")+", "
-                        +"Point: "+item.getPOIPoint().toString()
-                        +"Contents: " +item.getPOIContent());
-                TMapMarkerItem markerItem = new TMapMarkerItem();
-                markerItem.setTMapPoint(item.getPOIPoint());
-                markerItem.setCalloutTitle(item.getPOIName());
-                markerItem.setCalloutSubTitle(item.getPOIAddress());
-                markerItem.setCanShowCallout(true);
+                for(int i=0; i<arrayList.size(); i++){
+                    TMapPOIItem item = (TMapPOIItem) arrayList.get(i);
+                    Log.d("POI Name:", item.getPOIName().toString()+", "
+                            +"Address: "+item.getPOIAddress().replace("null"," ")+", "
+                            +"Point: "+item.getPOIPoint().toString()
+                            +"Contents: " +item.getPOIContent());
 
-                tMapView.addMarkerItem(item.getPOIName(), markerItem);
+                    // 마커
+                    TMapMarkerItem markerItem = new TMapMarkerItem();
+                    markerItem.setTMapPoint(item.getPOIPoint());
+                    markerItem.setCalloutTitle(item.getPOIName());
+                    markerItem.setCalloutSubTitle(item.getPOIAddress());
+                    markerItem.setCanShowCallout(true);
+
+                    tMapView.addMarkerItem(item.getPOIName(), markerItem);
+
+//                    poiList[i] = item.getPOIName();
+                }
+//                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_expandable_list_item_1, poiList);
+//                list.setAdapter(adapter);
             }
         });
+
+        View dialog = View.inflate(MainActivity.this, R.layout.activity_dialog, null);
+        AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+        dlg.setView(dialog);
+        dlg.show();
     }
 }

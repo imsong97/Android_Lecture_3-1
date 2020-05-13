@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*       setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         ListView list = (ListView)findViewById(R.id.listview);
 
@@ -40,42 +40,42 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), mid[position], Toast.LENGTH_SHORT).show();
             }
         });
-       */
 
-        setContentView(R.layout.dynamiclist);
-        final ArrayList<String> myList = new ArrayList<String>();
-        ListView list = (ListView)findViewById(R.id.list1);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, myList);
-        list.setAdapter(adapter);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
-        final EditText edtTitle = (EditText)findViewById(R.id.edtTitle);
-        Button btnAdd = (Button)findViewById(R.id.btnAdd);
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myList.add(edtTitle.getText().toString()); //추
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        //제거
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                myList.remove(position);
-                adapter.notifyDataSetChanged();
-
-                return false;
-            }
-        });
+//        setContentView(R.layout.dynamiclist);
+//        final ArrayList<String> myList = new ArrayList<String>();
+//        ListView list = (ListView)findViewById(R.id.list1);
+//
+//        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplication(), android.R.layout.simple_list_item_1, myList);
+//        list.setAdapter(adapter);
+//
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
+//
+//        final EditText edtTitle = (EditText)findViewById(R.id.edtTitle);
+//        Button btnAdd = (Button)findViewById(R.id.btnAdd);
+//
+//        btnAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                myList.add(edtTitle.getText().toString()); //추
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
+//
+//        //제거
+//        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                myList.remove(position);
+//                adapter.notifyDataSetChanged();
+//
+//                return false;
+//            }
+//        });
     }
 }
