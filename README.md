@@ -15,3 +15,5 @@
 
 <span>7주차 : 수업 & 과제-TMapLocation </span>
 
+<span>8주차 : 수업-MotionSensor & 과제- </span>
+
