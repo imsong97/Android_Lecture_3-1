@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             double jump = event.values[1] - 9.8;
 
             if(jump >= 5){
-                if(jump <= 5){
+                if(jump >= 5){
                     tvCount.setText(String.valueOf(count));
                     count += 1;
                 }
