@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     SensorManager sm;
     Sensor ac;
     int count = 1;
+    boolean up = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +37,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
-            double jump = event.values[1] - 9.8;
+            double total = Math.sqrt(Math.pow(event.values[0],2) + Math.pow(event.values[1],2) + Math.pow(event.values[2],2));
 
-            if(jump >= 5){
-                if(jump >= 5){
-                    tvCount.setText(String.valueOf(count));
-                    count += 1;
-                }
+            double jump = total - 9.8;
+            double down = 9.8 - total;
+
+            if(jump > 5)
+                up = true;
+
+            if(up==true && down > 5){
+                tvCount.setText(String.valueOf(count));
+                count += 1;
+                up = false;
             }
         }
     }
