@@ -17,5 +17,5 @@
 
 <span>8주차 : 수업-MotionSensor & 과제-JumpingCount </span>
 
-<span>9주차 : 수업-SensorList & 과제- </span>
+<span>9주차 : 수업-SensorList, BluetoothList</span>
 
