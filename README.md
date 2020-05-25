@@ -1,5 +1,5 @@
 # Android_Lecture
-<h2>3학년 2학기 안드로이드 수업</h2>
+<h2>3학년 1학기 안드로이드 수업</h2>
 
 <span>1주차(3/19) : 과제-LifeCycle </span>
 
