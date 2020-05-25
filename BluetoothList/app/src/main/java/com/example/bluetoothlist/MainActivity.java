@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Set;
@@ -48,12 +49,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //검색 기능 수행
+                doDiscovery();
+                v.setVisibility(View.GONE);
             }
         });
         btnDiscoverable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //자신의 장치 탐색 허용
+                ensureDiscoverable();
             }
         });
 
@@ -144,24 +148,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doDiscovery(){
+        // 제목 변경
+        setTitle("장치 스캐닝 중....");
 
+        // 새 장치의 부제목 표시
+        findViewById(R.id.title2).setVisibility(View.VISIBLE);
+
+        // 이미 장치를 발견한 경우 스캐닝 중지
+        if(ba.isDiscovering())
+            ba.cancelDiscovery();
+
+        // 장치 검색 요청
+        ba.startDiscovery();
     }
 
     public void ensureDiscoverable(){
-
+        if(ba.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE){
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 60);
+            startActivity(intent);
+        }
     }
 
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ba.cancelDiscovery(); // 연결 작업을 위해 검색을 취소
 
+            // 장치 이름과 MAC주소 얻기
+            String info = ((TextView)view).getText().toString();
+            String address = info.substring(info.length() - 17);
+
+            // 연결을 위한 코드
+            Toast.makeText(getApplicationContext(), address + "로 연결합니다", Toast.LENGTH_SHORT).show();
         }
     };
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
 
+            // 기기 검색 상태 브로드캐스트 수신 처리
+            if(BluetoothDevice.ACTION_FOUND.equals(action)){
+                BluetoothDevice d = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE); // Intent에서 장치 객체 가져오기
+
+                if(d.getBondState() != BluetoothDevice.BOND_BONDED)  // 목록에 없는경우 검색기기의 목록 추가
+                   device.add(d.getName() + "\n" + d.getAddress());
+
+            }
+            else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){ // 기기 검색 완료 상태인 브로드캐스트 수신 시 처리
+                if(device.getCount() == 0){
+                    String noDevices = "검색된 장치가 없습니다".toString();
+                    setTitle(noDevices);
+                    btnScan.setVisibility(View.VISIBLE);
+                    device.add(noDevices);
+                }
+                else
+                    setTitle("연결할 장치를 선택하세요");
+            }
         }
     };
 }
