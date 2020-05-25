@@ -28,7 +28,7 @@
         android:id="@+id/title2"
         android:text="검색된 주변 기기"
         android:background="#9FAAEA"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <ListView
         android:layout_width="match_parent"
@@ -42,5 +42,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/scan"
         android:text="장치 찾기"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/discoverable"
+        android:text="검색 허용"/>
 
 </LinearLayout>
