@@ -21,7 +21,7 @@
 
 <span>10주차(5/21) : 수업-SensorList, BluetoothList</span>
 
-<span>11주차(5/28) : 수업-BluetoothList</span>
+<span>11주차(5/28) : 수업 & 과제 -BluetoothList</span>
 
 <span>12주차(6/4) : 수업-</span>
 
