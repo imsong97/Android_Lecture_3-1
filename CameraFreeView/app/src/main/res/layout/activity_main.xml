@@ -12,14 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
-        
+
         <Button
+            android:id="@+id/btnCapture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnCapture"
             android:text="Capture"
             android:layout_gravity="center|right"/>
-        
+
+        <Button
+            android:id="@+id/btnFlash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flash ON"
+            android:layout_gravity="center|left"/>
+
     </FrameLayout>
 
 </LinearLayout>

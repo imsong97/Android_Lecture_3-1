@@ -1,10 +1,13 @@
 package com.example.camerafreeview;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -25,7 +28,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private Camera mCamera;
     private CameraPreview cp;
-    private Button btnCapture;
+    private Button btnCapture, btnFlash;
+    private boolean flash = false;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -46,6 +50,27 @@ public class MainActivity extends AppCompatActivity {
                         mCamera.takePicture(null, null, mPicture);
                     }
                 });
+            }
+        });
+
+        btnFlash = findViewById(R.id.btnFlash);
+        btnFlash.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                if(!flash){ // 초기 false상태 -> 꺼져있음
+                    Toast.makeText(getApplicationContext(), "플래쉬 켜짐", Toast.LENGTH_SHORT).show(); // 상태 알림
+                    playFlash(flash);
+                    btnFlash.setText("Flash OFF"); // 텍스트바꾸기,  텍스트와 상태는 반대: off상태 -> 텍스트는 on표시
+                    flash = true; //상태 바꾸고
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "플래쉬 꺼짐", Toast.LENGTH_SHORT).show();
+                    playFlash(flash);
+                    btnFlash.setText("Flash ON");
+                    flash = false;
+                }
+
             }
         });
 
@@ -89,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
-    // 카메라 하드웨어 감
+    // 카메라 하드웨어 감지
     private boolean checkCameraHardware(Context context){
         if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA))
             return true; // 카메라 있음
@@ -191,5 +216,16 @@ public class MainActivity extends AppCompatActivity {
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
             mCamera.setParameters(params);
         }
+    }
+
+    private void playFlash(boolean flashMode){
+        Camera.Parameters params = mCamera.getParameters();
+        if(!flashMode)
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+        else
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+
+        mCamera.setParameters(params);
+        mCamera.startPreview();
     }
 }
