@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 
+import android.media.CamcorderProfile;
+import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,8 +30,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private Camera mCamera;
     private CameraPreview cp;
-    private Button btnCapture, btnFlash;
+    private Button btnCapture, btnFlash, btnVideo;
     private boolean flash = false;
+
+    private MediaRecorder mediaRecorder;
+    private boolean isRecording = false;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -70,7 +75,31 @@ public class MainActivity extends AppCompatActivity {
                     btnFlash.setText("Flash ON");
                     flash = false;
                 }
+            }
+        });
 
+        btnVideo = findViewById(R.id.btnVideo);
+        btnVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isRecording){ // 녹화 중지
+                    mediaRecorder.stop(); // 중지
+                    releaseMediaRecorder(); //미디어레코드 객체 해제
+                    mCamera.lock(); // 카메라 접근 잠금
+
+                    btnVideo.setText("Video");
+                    isRecording = false;
+                }
+                else{ // 영상 촬영
+                    if (prepareVideoRecorder()) { // 카메라가 사용가능 & 잠금이 해제되면 녹화 시작 가능
+                        mediaRecorder.start(); // 시작
+
+                        btnVideo.setText("Recording");
+                        isRecording = true;
+                    } else // 준비가 안되면 객체 해제
+                        releaseMediaRecorder();
+
+                }
             }
         });
 
@@ -105,6 +134,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //카메라 해제코드
+        releaseMediaRecorder();
+        releaseCamera();
+    }
+
+    private void releaseMediaRecorder(){
+        if (mediaRecorder != null) {
+            mediaRecorder.reset();   // clear recorder configuration
+            mediaRecorder.release(); // release the recorder object
+            mediaRecorder = null;
+            mCamera.lock();           // lock camera for later use
+        }
+    }
+
+    private void releaseCamera(){
+        if (mCamera != null){
+            mCamera.release();        // release the camera for other applications
+            mCamera = null;
+        }
     }
 
     private void hideSystemUI(){
@@ -177,11 +224,9 @@ public class MainActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"+ timeStamp + ".jpg");
         } else if(type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_"+ timeStamp + ".mp4");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "VID_"+ timeStamp + ".mp4");
         } else {
             return null;
         }
@@ -227,5 +272,42 @@ public class MainActivity extends AppCompatActivity {
 
         mCamera.setParameters(params);
         mCamera.startPreview();
+    }
+
+    private boolean prepareVideoRecorder(){
+        mCamera = getCameraInstance();
+        mediaRecorder = new MediaRecorder();
+
+        // 1. 카메라 언락 후 미디어 레코드에 카메라 객체 설정
+        mCamera.unlock();
+        mediaRecorder.setCamera(mCamera);
+
+        // 2. 오디오 비디오 소스 설정
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+
+        // 3. 캠코더프로파일을 통해 동영상 출력 형식과 인코딩 설정(API 8이상 요구)
+        mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+
+        // 4. 동영상 파일 설정
+        mediaRecorder.setOutputFile(getOutputMediaFile(MEDIA_TYPE_VIDEO).toString());
+
+        // 5. 미디어 레코더에 미리보기 화면을 설정
+        mediaRecorder.setPreviewDisplay(cp.getHolder().getSurface());
+
+        // 6. 미디어 레코드 준비
+        try {
+            mediaRecorder.prepare();
+        } catch (IllegalStateException e) {
+            Log.d("TAG", "IllegalStateException preparing MediaRecorder: " + e.getMessage());
+            releaseMediaRecorder();
+            return false;
+        } catch (IOException e) {
+            Log.d("TAG", "IOException preparing MediaRecorder: " + e.getMessage());
+            releaseMediaRecorder();
+            return false;
+        }
+
+        return true;
     }
 }

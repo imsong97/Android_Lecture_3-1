@@ -17,7 +17,7 @@
             android:id="@+id/btnCapture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Capture"
+            android:text="Picture"
             android:layout_gravity="center|right"/>
 
         <Button
@@ -26,6 +26,13 @@
             android:layout_height="wrap_content"
             android:text="Flash ON"
             android:layout_gravity="center|left"/>
+
+        <Button
+            android:id="@+id/btnVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Video"
+            android:layout_gravity="top|right"/>
 
     </FrameLayout>
 
